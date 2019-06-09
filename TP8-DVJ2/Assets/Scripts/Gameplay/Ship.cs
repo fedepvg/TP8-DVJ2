@@ -8,5 +8,5 @@ public abstract class Ship : MonoBehaviour
 
     public abstract void Shoot();
     public abstract void Move();
-    public abstract void GetDamage();
+    public abstract void GetHitted(int damage);
 }

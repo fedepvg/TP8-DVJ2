@@ -27,7 +27,7 @@ public class PlayerShip : Ship
         Shoot();
     }
 
-    public override void GetDamage()
+    public override void GetHitted(int damage)
     {
         
     }
