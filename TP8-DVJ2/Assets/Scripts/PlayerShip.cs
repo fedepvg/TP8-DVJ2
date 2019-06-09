@@ -8,16 +8,23 @@ public class PlayerShip : Ship
     KeyCode BasicShoot = KeyCode.J;
     KeyCode MissileShoot = KeyCode.K;
     public Collider2D LevelBounds;
+    public Transform LeftCannon;
+    public Transform RightCannon;
+    public Transform MiddleCannon;
+    float FireRate = 0.1f;
+    float ShootTimer;
+    public GameObject BulletPrefab;
 
     void Start()
     {
-
+        ShootTimer = FireRate;
     }
 
     void Update()
     {
         Move();
         CheckWorldBounds();
+        Shoot();
     }
 
     public override void GetDamage()
@@ -36,7 +43,16 @@ public class PlayerShip : Ship
 
     public override void Shoot()
     {
-        
+        ShootTimer += Time.deltaTime;
+        if (Input.GetKey(BasicShoot))
+        {
+            if(ShootTimer >= FireRate)
+            {
+                ShootTimer = 0;
+                GameObject leftBullet = Instantiate(BulletPrefab, LeftCannon.position,Quaternion.identity);
+                GameObject RightBullet = Instantiate(BulletPrefab, RightCannon.position,Quaternion.identity);
+            }
+        }
     }
 
     void CheckWorldBounds()

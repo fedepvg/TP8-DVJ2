@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Ship : MonoBehaviour
 {
-    protected int Health;
+    protected int Energy;
 
     public abstract void Shoot();
     public abstract void Move();
