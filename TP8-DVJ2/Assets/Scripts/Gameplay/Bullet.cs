@@ -5,12 +5,6 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float Speed;
-    Transform Bounds;
-
-    private void Start()
-    {
-        Bounds = GameObject.Find("Bounds").transform;
-    }
 
     void Update()
     {

@@ -65,4 +65,13 @@ public class PlayerShip : Ship
 
         transform.position = pos;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            Energy = 0;
+            Debug.Log("En=0");
+        }
+    }
 }

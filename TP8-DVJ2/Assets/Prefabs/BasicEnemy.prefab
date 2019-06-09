@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3255453638739016440}
   m_Layer: 0
   m_Name: BasicEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -150,6 +150,10 @@ MonoBehaviour:
   Cannon: {fileID: 7974580043530210006}
   BulletPrefab: {fileID: 5841245319303374670, guid: 27a271e18e280b74fb0adc9551bb1015,
     type: 3}
+  Speed: 4
+  RaycastLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &6007039173395166904
 GameObject:
   m_ObjectHideFlags: 0
