@@ -7,13 +7,13 @@ public class PlayerShip : Ship
     public float Speed;
     private int MaxEnergy = 100;
     KeyCode BasicShoot = KeyCode.J;
-    //KeyCode MissileShoot = KeyCode.K;
     public Transform LeftCannon;
     public Transform RightCannon;
     public Transform MiddleCannon;
     float FireRate = 0.05f;
     float ShootTimer;
     public GameObject BulletPrefab;
+    public float EnergyLossMultiplier;
 
     void Start()
     {
@@ -23,6 +23,7 @@ public class PlayerShip : Ship
 
     void Update()
     {
+        Energy -= Time.deltaTime * EnergyLossMultiplier;
         if(Energy <= 0)
         {
             //Destroy(gameObject);
@@ -73,6 +74,11 @@ public class PlayerShip : Ship
         pos.y = Mathf.Clamp(pos.y, bounds.min.y + scale.y / 2, bounds.max.y - scale.y / 2);
 
         transform.position = pos;
+    }
+
+    public float GetEnergy()
+    {
+        return Energy;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
