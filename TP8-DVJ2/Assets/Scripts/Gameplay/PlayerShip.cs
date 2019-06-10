@@ -6,12 +6,12 @@ public class PlayerShip : Ship
 {
     public float Speed;
     KeyCode BasicShoot = KeyCode.J;
-    KeyCode MissileShoot = KeyCode.K;
+    //KeyCode MissileShoot = KeyCode.K;
     public Collider2D LevelBounds;
     public Transform LeftCannon;
     public Transform RightCannon;
     public Transform MiddleCannon;
-    float FireRate = 0.1f;
+    float FireRate = 0.05f;
     float ShootTimer;
     public GameObject BulletPrefab;
 

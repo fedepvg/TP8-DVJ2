@@ -151,9 +151,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 5841245319303374670, guid: 27a271e18e280b74fb0adc9551bb1015,
     type: 3}
   Speed: 4
-  RaycastLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
+  KamikazeSpeed: 8
 --- !u!1 &6007039173395166904
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +176,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6007039173395166904}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.17, z: -0.6187282}
+  m_LocalPosition: {x: 0, y: -0.17, z: 0}
   m_LocalScale: {x: 0.4551869, y: 0.4551869, z: 1.3655607}
   m_Children: []
   m_Father: {fileID: 420902}
