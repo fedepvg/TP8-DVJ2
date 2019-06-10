@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerShip : Ship
 {
     public float Speed;
+    private int MaxEnergy = 100;
     KeyCode BasicShoot = KeyCode.J;
     //KeyCode MissileShoot = KeyCode.K;
-    public Collider2D LevelBounds;
     public Transform LeftCannon;
     public Transform RightCannon;
     public Transform MiddleCannon;
@@ -18,10 +18,15 @@ public class PlayerShip : Ship
     void Start()
     {
         ShootTimer = FireRate;
+        Energy = MaxEnergy;
     }
 
     void Update()
     {
+        if(Energy <= 0)
+        {
+            //Destroy(gameObject);
+        }
         Move();
         CheckWorldBounds();
         Shoot();
@@ -29,7 +34,11 @@ public class PlayerShip : Ship
 
     public override void GetHitted(int damage)
     {
-        
+        Energy -= damage;
+        if(Energy <= 0)
+        {
+            //Destroy(gameObject);
+        }
     }
 
     public override void Move()
@@ -59,7 +68,7 @@ public class PlayerShip : Ship
     {
         Vector3 pos = transform.position;
         Vector3 scale = transform.localScale;
-        Bounds bounds = LevelBounds.bounds;
+        Bounds bounds = CameraUtils.OrthographicBounds();
         pos.x = Mathf.Clamp(pos.x, bounds.min.x + scale.x/2, bounds.max.x - scale.x / 2);
         pos.y = Mathf.Clamp(pos.y, bounds.min.y + scale.y / 2, bounds.max.y - scale.y / 2);
 
@@ -68,10 +77,17 @@ public class PlayerShip : Ship
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Enemy")
+        if (collision.tag == "EnemyBullet")
         {
-            Energy = 0;
-            Debug.Log("En=0");
+            GetHitted(collision.GetComponent<Bullet>().GetDamageAmount());
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Enemy")
+        {
+            GetHitted(MaxEnergy);
         }
     }
 }

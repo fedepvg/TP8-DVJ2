@@ -10,20 +10,21 @@ public class BasicEnemy : Ship
     public Transform Cannon;
     public GameObject BulletPrefab;
     public enum States { Attack, Kamikaze };
-    const float MinDistanceToPlayer = 3.5f;
     States CurrentState;
     public float Speed;
     public float KamikazeSpeed;
     Quaternion RotationToPlayer;
     float ShootTimer;
-    const float FireRate = 1f;
+    public float FireRate;
+    Vector3 DownRotation = new Vector3(0, 0, 180);
 
     private void Start()
     {
         Energy = MaxEnergy;
         Player = GameObject.Find("PlayerShip").transform;
         CurrentState = States.Attack;
-        ShootTimer = 0f;
+        ShootTimer = FireRate/2;
+        transform.Rotate(DownRotation);
     }
 
     private void Update()
@@ -35,7 +36,7 @@ public class BasicEnemy : Ship
             case States.Attack:
                 ShootTimer += Time.deltaTime;
                 pos += Vector3.down * Speed * Time.deltaTime;
-                if (ShootTimer >= FireRate)
+                if (ShootTimer >= FireRate && IsOnFireZone())
                 {
                     Shoot();
                     ShootTimer = 0f;
@@ -43,13 +44,14 @@ public class BasicEnemy : Ship
                 break;
             case States.Kamikaze:
                 LookToPlayer();
-                //pos = Vector2.MoveTowards(pos, Player.position, Speed * Time.deltaTime);
-                pos += -transform.up * KamikazeSpeed * Time.deltaTime;
+                pos += transform.up * KamikazeSpeed * Time.deltaTime;
                 break;
         }
         transform.position = pos;
-        //transform.RotateAround(Player.transform.position, Vector3.forward, 0.1f);
-        //transform.rotation = Quaternion.identity;
+        if(IsOutOfScreen())
+        {
+            Destroy(gameObject);
+        }
     }
 
     void CheckState()
@@ -57,7 +59,7 @@ public class BasicEnemy : Ship
         Vector3 pos = transform.position;
         Vector3 playerPos = Player.transform.position;
 
-        if(Energy <= EnergyToKamikazeAttack || Vector3.Distance(pos, playerPos) < MinDistanceToPlayer)
+        if(Energy <= EnergyToKamikazeAttack)
         {
             CurrentState = States.Kamikaze;
         }
@@ -67,10 +69,10 @@ public class BasicEnemy : Ship
         }
     }
 
-    void LookRotationToPlayer(out Quaternion rot, Vector3 upwards)
+    void LookRotationToPlayer(out Quaternion rot)
     {
         Vector3 relativePos = Player.position - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos, upwards);
+        Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.back);
         rotation.x = 0;
         rotation.y = 0;
         rot = rotation;
@@ -79,13 +81,17 @@ public class BasicEnemy : Ship
     void LookToPlayer()
     {
         Quaternion q = new Quaternion();
-        LookRotationToPlayer(out q, Vector3.forward);
+        LookRotationToPlayer(out q);
         transform.rotation = Quaternion.Lerp(transform.rotation, q, Mathf.PingPong(Time.time, 2) / 2);
     }
 
     public override void GetHitted(int damage)
     {
-        
+        Energy -= damage;
+        if(Energy <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public override void Move()
@@ -97,9 +103,32 @@ public class BasicEnemy : Ship
 
     public override void Shoot()
     {
-        Quaternion shootRot;
-        LookRotationToPlayer(out shootRot, Vector3.back);
-        Instantiate(BulletPrefab, Cannon.transform.position, shootRot);
+        Quaternion bulletRotation;
+        LookRotationToPlayer(out bulletRotation);
+        Instantiate(BulletPrefab, Cannon.transform.position, bulletRotation);
+    }
+
+    bool IsOutOfScreen()
+    {
+        Bounds bounds = CameraUtils.OrthographicBounds();
+        float halfScale = transform.GetComponent<SpriteRenderer>().bounds.size.x;
+        Vector3 pos = transform.position;
+        float leftBound = bounds.min.x;
+        float rightBound = bounds.max.x;
+        float downBound = bounds.min.y;
+        if (pos.x < leftBound - halfScale || pos.x > rightBound + halfScale ||
+            pos.y < downBound - halfScale)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool IsOnFireZone()
+    {
+        Vector3 pos = transform.position;
+        float fireZone = CameraUtils.OrthographicBounds().center.y;
+        return pos.y > fireZone;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -108,6 +137,14 @@ public class BasicEnemy : Ship
         {
             Bullet bullet = collision.GetComponent<Bullet>();
             GetHitted(bullet.GetDamageAmount());
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag=="Player")
+        {
+            GetHitted(MaxEnergy);
         }
     }
 }
