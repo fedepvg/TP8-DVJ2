@@ -26,6 +26,7 @@ public class PlayerShip : Ship
         Energy -= Time.deltaTime * EnergyLossMultiplier;
         if(Energy <= 0)
         {
+            GameManager.Instance.GameOver();
             //Destroy(gameObject);
         }
         Move();
