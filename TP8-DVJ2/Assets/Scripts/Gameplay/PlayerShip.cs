@@ -26,8 +26,7 @@ public class PlayerShip : Ship
         Energy -= Time.deltaTime * EnergyLossMultiplier;
         if(Energy <= 0)
         {
-            GameManager.Instance.GameOver();
-            //Destroy(gameObject);
+            Die();
         }
         Move();
         CheckWorldBounds();
@@ -39,8 +38,18 @@ public class PlayerShip : Ship
         Energy -= damage;
         if(Energy <= 0)
         {
-            //Destroy(gameObject);
+            Die();
         }
+        else
+        {
+            ChangeColor();
+        }
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        Destroy(this);
     }
 
     public override void Move()

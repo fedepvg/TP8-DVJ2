@@ -25,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject go = Instantiate(BasicEnemyPrefab);
             Vector2 pos = GetSpawnRange();
             go.transform.position = pos;
+            GameManager.Instance.AddEnemyOnScreen();
         }
     }
 

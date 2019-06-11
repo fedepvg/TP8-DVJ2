@@ -17,6 +17,10 @@ public class BasicEnemy : Ship
     float ShootTimer;
     public float FireRate;
     Vector3 DownRotation = new Vector3(0, 0, 180);
+    public delegate void BasicEnemyKilledAction(int score);
+    public static BasicEnemyKilledAction OnBasicEnemyKilled;
+    Vector3 playerPos;
+    int ScoreOnDead = 1000;
 
     private void Start()
     {
@@ -50,14 +54,18 @@ public class BasicEnemy : Ship
         transform.position = pos;
         if(IsOutOfScreen())
         {
-            Destroy(gameObject);
+            Die();
         }
     }
 
     void CheckState()
     {
         Vector3 pos = transform.position;
-        Vector3 playerPos = Player.transform.position;
+        
+        if (Player != null)
+            playerPos = Player.transform.position;
+        else
+            playerPos = Vector3.zero;
 
         if(Energy <= EnergyToKamikazeAttack)
         {
@@ -71,7 +79,7 @@ public class BasicEnemy : Ship
 
     void LookRotationToPlayer(out Quaternion rot)
     {
-        Vector3 relativePos = Player.position - transform.position;
+        Vector3 relativePos = playerPos - transform.position;
         Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.back);
         rotation.x = 0;
         rotation.y = 0;
@@ -90,7 +98,11 @@ public class BasicEnemy : Ship
         Energy -= damage;
         if(Energy <= 0)
         {
-            Destroy(gameObject);
+            Die();
+        }
+        else
+        {
+            ChangeColor();
         }
     }
 
@@ -131,6 +143,14 @@ public class BasicEnemy : Ship
         return pos.y > fireZone;
     }
 
+    void BasicEnemyKilled()
+    {
+        if (OnBasicEnemyKilled != null)
+            OnBasicEnemyKilled(ScoreOnDead);
+
+        Die();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag=="PlayerBullet")
@@ -146,5 +166,10 @@ public class BasicEnemy : Ship
         {
             GetHitted(MaxEnergy);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.SubstractEnemyOnScreen();
     }
 }
