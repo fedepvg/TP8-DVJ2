@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         TimeToNextBasicEnemy = 0.2f;
+        PlayerShip.OnPlayerKilled += DestroySpawner;
     }
 
     private void Update()
@@ -38,6 +39,11 @@ public class EnemySpawner : MonoBehaviour
         spawnPoint.x = Random.Range(bounds.min.x + halfWidth, bounds.max.x - halfWidth);
         spawnPoint.y = bounds.max.y + halfHeight;
         return spawnPoint;
+    }
+
+    void DestroySpawner()
+    {
+        Destroy(gameObject);
     }
 
     float SetNextEnemySpawn(float minRate, float maxRate)

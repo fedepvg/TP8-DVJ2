@@ -11,5 +11,9 @@ public class UIInGameManager : MonoBehaviour
     private void Update()
     {
         EnergySlider.value = Player.GetEnergy();
+        if(Player.GetEnergy()==0)
+        {
+            EnergySlider.fillRect.gameObject.SetActive(false);
+        }
     }
 }

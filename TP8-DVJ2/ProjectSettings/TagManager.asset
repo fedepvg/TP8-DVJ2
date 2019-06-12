@@ -8,6 +8,8 @@ TagManager:
   - EnemyBullet
   - Bounds
   - Enemy
+  - BulletItem
+  - EnergyItem
   layers:
   - Default
   - TransparentFX

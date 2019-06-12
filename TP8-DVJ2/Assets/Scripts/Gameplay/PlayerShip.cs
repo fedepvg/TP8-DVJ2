@@ -14,19 +14,27 @@ public class PlayerShip : Ship
     float ShootTimer;
     public GameObject BulletPrefab;
     public float EnergyLossMultiplier;
+    public delegate void PlayerKilledAction();
+    public static PlayerKilledAction OnPlayerKilled;
+    int EnergyItemAddition = 10;
+    bool ExtraBullet;
+    int ExtraBulletTime = 10;
 
     void Start()
     {
         ShootTimer = FireRate;
         Energy = MaxEnergy;
+        OnPlayerKilled += Die;
+        ExtraBullet = false;
     }
 
     void Update()
     {
         Energy -= Time.deltaTime * EnergyLossMultiplier;
-        if(Energy <= 0)
+        if (Energy <= 0)
         {
-            Die();
+            if (OnPlayerKilled != null)
+                OnPlayerKilled();
         }
         Move();
         CheckWorldBounds();
@@ -36,9 +44,11 @@ public class PlayerShip : Ship
     public override void GetHitted(int damage)
     {
         Energy -= damage;
+        ExtraBullet = false;
         if(Energy <= 0)
         {
-            Die();
+            if (OnPlayerKilled != null)
+                OnPlayerKilled();
         }
         else
         {
@@ -70,7 +80,14 @@ public class PlayerShip : Ship
             {
                 ShootTimer = 0;
                 GameObject leftBullet = Instantiate(BulletPrefab, LeftCannon.position,Quaternion.identity);
-                GameObject RightBullet = Instantiate(BulletPrefab, RightCannon.position,Quaternion.identity);
+                leftBullet.name = "LBullet";
+                GameObject rightBullet = Instantiate(BulletPrefab, RightCannon.position,Quaternion.identity);
+                rightBullet.name = "RBullet";
+                if (ExtraBullet)
+                {
+                    GameObject MiddleBullet = Instantiate(BulletPrefab, MiddleCannon.position, Quaternion.identity);
+                    MiddleBullet.name = "MBullet";
+                }
             }
         }
     }
@@ -91,11 +108,36 @@ public class PlayerShip : Ship
         return Energy;
     }
 
+    void DeactivateExtraBullet()
+    {
+        ExtraBullet = false;
+    }
+
+    void AddEnergy(int e)
+    {
+        Energy += e;
+        if(Energy>MaxEnergy)
+        {
+            Energy = MaxEnergy;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "EnemyBullet")
+        switch(collision.tag)
         {
-            GetHitted(collision.GetComponent<Bullet>().GetDamageAmount());
+            case "EnemyBullet":
+                GetHitted(collision.GetComponent<Bullet>().GetDamageAmount());
+                break;
+            case "BulletItem":
+                ExtraBullet = true;
+                Invoke("DeactivateExtraBullet", ExtraBulletTime);
+                break;
+            case "EnergyItem":
+                AddEnergy(EnergyItemAddition);
+                break;
+            default:
+                break;
         }
     }
 

@@ -102,6 +102,10 @@ MonoBehaviour:
   Speed: 2
   KamikazeSpeed: 5
   FireRate: 0.8
+  EnergyItem: {fileID: 2105781070755828627, guid: e52d4b0134d4ad344abd80825a60fdac,
+    type: 3}
+  BulletItem: {fileID: 2105781070755828627, guid: 6511ea55daea23f42938174e7f2fc43b,
+    type: 3}
 --- !u!60 &2035213601992407542
 PolygonCollider2D:
   m_ObjectHideFlags: 0

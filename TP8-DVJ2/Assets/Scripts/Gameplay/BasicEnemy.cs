@@ -21,6 +21,11 @@ public class BasicEnemy : Ship
     public static BasicEnemyKilledAction OnBasicEnemyKilled;
     Vector3 playerPos;
     int ScoreOnDead = 1000;
+    public GameObject EnergyItem;
+    public GameObject BulletItem;
+    int ChanceToSpawnItem = 20;
+    int TopValueToSpawnEnergy = 3;
+    int TopValueToSpawnBullet = 6;
 
     private void Start()
     {
@@ -61,11 +66,14 @@ public class BasicEnemy : Ship
     void CheckState()
     {
         Vector3 pos = transform.position;
-        
+
         if (Player != null)
             playerPos = Player.transform.position;
         else
+        {
             playerPos = Vector3.zero;
+            Energy = MaxEnergy;
+        }
 
         if(Energy <= EnergyToKamikazeAttack)
         {
@@ -74,6 +82,25 @@ public class BasicEnemy : Ship
         else
         {
             CurrentState = States.Attack;
+        }
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        TryToSpawnItem();
+    }
+
+    void TryToSpawnItem()
+    {
+        int rand = Random.Range(0, ChanceToSpawnItem);
+        if(rand<TopValueToSpawnEnergy)
+        {
+            Instantiate(EnergyItem, transform.position, Quaternion.identity);
+        }
+        else if(rand < TopValueToSpawnBullet)
+        {
+            Instantiate(BulletItem, transform.position, Quaternion.identity);
         }
     }
 

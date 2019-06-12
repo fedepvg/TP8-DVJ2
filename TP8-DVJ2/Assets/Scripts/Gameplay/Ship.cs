@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class Ship : MonoBehaviour
 {
-    protected float Energy;
+    public float Energy;
     float TimeToNormalColor = 0.05f;
 
     public abstract void Shoot();
