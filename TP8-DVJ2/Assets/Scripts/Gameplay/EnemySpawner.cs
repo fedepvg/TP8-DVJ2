@@ -8,7 +8,13 @@ public class EnemySpawner : MonoBehaviour
     public float BasicEnemyMinRate;
     public float BasicEnemyMaxRate;
     float TimeToNextBasicEnemy;
+    float GroupCooldown;
+    public float GroupMinSpawnRate;
+    public float GroupMaxSpawnRate;
+    public float GroupDistance;
+    float TimeToNextGroup;
     public GameObject BasicEnemyPrefab;
+    public GameObject GroupEnemyPrefab;
 
     private void Start()
     {
@@ -19,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         BasicEnemyCooldown += Time.deltaTime;
+        GroupCooldown += Time.deltaTime;
         if (BasicEnemyCooldown >= TimeToNextBasicEnemy)
         {
             BasicEnemyCooldown = 0;
@@ -26,6 +33,14 @@ public class EnemySpawner : MonoBehaviour
             GameObject go = Instantiate(BasicEnemyPrefab);
             Vector2 pos = GetSpawnRange();
             go.transform.position = pos;
+            GameManager.Instance.AddEnemyOnScreen();
+        }
+        if (GroupCooldown >= TimeToNextGroup)
+        {
+            GroupCooldown = 0;
+            TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
+            GameObject go = Instantiate(GroupEnemyPrefab,Vector3.zero,Quaternion.identity);
+            //recursividad con invoke para varios enemigos
             GameManager.Instance.AddEnemyOnScreen();
         }
     }

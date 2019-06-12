@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     private void Start()
     {
         EnemiesOnScreen = 0;
+        PlayerShip.OnPlayerKilled += GameOver;
     }
 
     public void AddEnemyOnScreen()

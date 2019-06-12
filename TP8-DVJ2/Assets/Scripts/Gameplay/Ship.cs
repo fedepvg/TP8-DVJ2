@@ -29,7 +29,7 @@ public abstract class Ship : MonoBehaviour
         Invoke("ReturnToNormalColor", TimeToNormalColor);
     }
 
-    void ReturnToNormalColor()
+    protected void ReturnToNormalColor()
     {
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         renderer.color = Color.white;

@@ -603,9 +603,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e39ee7662fa799a4f8014b151eaac8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BasicEnemyMinRate: 0.5
-  BasicEnemyMaxRate: 1
+  BasicEnemyMinRate: 500
+  BasicEnemyMaxRate: 500
+  GroupMinSpawnRate: 1
+  GroupMaxSpawnRate: 1
+  GroupDistance: 1
   BasicEnemyPrefab: {fileID: 147846, guid: e2a563409f05b26429e07cb45c0d2ea2, type: 3}
+  GroupEnemyPrefab: {fileID: 147846, guid: f7e008b4d3916784c867b85367828138, type: 3}
 --- !u!1 &1426632861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,6 +1021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a4fc85861b6e7448206452d7120363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Energy: 0
   Speed: 6
   LeftCannon: {fileID: 1692616481629220853}
   RightCannon: {fileID: 5950513768337119443}
