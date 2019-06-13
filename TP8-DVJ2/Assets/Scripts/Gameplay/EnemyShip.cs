@@ -38,6 +38,7 @@ public abstract class EnemyShip : Ship
         if (Energy <= 0)
         {
             Die();
+            ScoreManager.Instance.AddScore(ScoreOnDead);
         }
         else
         {
@@ -72,6 +73,11 @@ public abstract class EnemyShip : Ship
         {
             Bullet bullet = collision.GetComponent<Bullet>();
             GetHitted(bullet.GetDamageAmount());
+            Destroy(collision.gameObject);
+        }
+        if (collision.transform.tag == "Player")
+        {
+            GetHitted(MaxEnergy);
         }
     }
 

@@ -18,32 +18,36 @@ public class EnemySpawner : MonoBehaviour
     public float EnemiesPerGroup;
     float EnemiesOnCurrentGroup;
     Vector3 GroupSpawnPosition;
+    public LevelManager levelManager;
 
     private void Start()
     {
-        //TimeToNextBasicEnemy = 0.2f;
-        PlayerShip.OnPlayerKilled += DestroySpawner;
+        TimeToNextBasicEnemy = 0.2f;
+        //PlayerShip.OnPlayerKilled += DestroySpawner;
         TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
     }
 
     private void Update()
     {
-        BasicEnemyCooldown += Time.deltaTime;
-        GroupCooldown += Time.deltaTime;
-        if (BasicEnemyCooldown >= TimeToNextBasicEnemy)
+        if (levelManager.GetDistanceLeft() > 0)
         {
-            BasicEnemyCooldown = 0;
-            TimeToNextBasicEnemy = SetNextEnemySpawn(BasicEnemyMinRate, BasicEnemyMaxRate);
-            GameObject go = Instantiate(BasicEnemyPrefab);
-            Vector2 pos = GetSpawnRange();
-            go.transform.position = pos;
-            GameManager.Instance.AddEnemyOnScreen();
-        }
-        if (GroupCooldown >= TimeToNextGroup)
-        {
-            GroupCooldown = 0;
-            TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
-            CreateEnemyOfGroup();
+            BasicEnemyCooldown += Time.deltaTime;
+            GroupCooldown += Time.deltaTime;
+            if (BasicEnemyCooldown >= TimeToNextBasicEnemy)
+            {
+                BasicEnemyCooldown = 0;
+                TimeToNextBasicEnemy = SetNextEnemySpawn(BasicEnemyMinRate, BasicEnemyMaxRate);
+                GameObject go = Instantiate(BasicEnemyPrefab);
+                Vector2 pos = GetSpawnRange();
+                go.transform.position = pos;
+                GameManager.Instance.AddEnemyOnScreen();
+            }
+            if (GroupCooldown >= TimeToNextGroup)
+            {
+                GroupCooldown = 0;
+                TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
+                CreateEnemyOfGroup();
+            }
         }
     }
 

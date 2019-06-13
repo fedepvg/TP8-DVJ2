@@ -12,11 +12,6 @@ public class ScoreManager : MonoBehaviourSingleton<ScoreManager>
         base.Awake();
     }
 
-    private void Start()
-    {
-        BasicEnemy.OnBasicEnemyKilled += AddScore;
-    }
-
     public int Score
     {
         get { return score; }
@@ -27,7 +22,7 @@ public class ScoreManager : MonoBehaviourSingleton<ScoreManager>
         get { return killedEnemies; }
     }
 
-    void AddScore(int scoreToAdd)
+    public void AddScore(int scoreToAdd)
     {
         score += scoreToAdd;
     }

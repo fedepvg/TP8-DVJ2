@@ -128,6 +128,7 @@ public class PlayerShip : Ship
         {
             case "EnemyBullet":
                 GetHitted(collision.GetComponent<Bullet>().GetDamageAmount());
+                Destroy(collision.gameObject);
                 break;
             case "BulletItem":
                 ExtraBullet = true;
@@ -135,6 +136,9 @@ public class PlayerShip : Ship
                 break;
             case "EnergyItem":
                 AddEnergy(EnergyItemAddition);
+                break;
+            case "Enemy":
+                GetHitted(MaxEnergy);
                 break;
             default:
                 break;

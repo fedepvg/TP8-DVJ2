@@ -12,8 +12,6 @@ public class BasicEnemy : EnemyShip
     Quaternion RotationToPlayer;
     float ShootTimer;
     Vector3 DownRotation = new Vector3(0, 0, 180);
-    public delegate void BasicEnemyKilledAction(int score);
-    public static BasicEnemyKilledAction OnBasicEnemyKilled;
     Vector3 playerPos;
 
     private void Start()
@@ -110,13 +108,5 @@ public class BasicEnemy : EnemyShip
         Vector3 pos = transform.position;
         float fireZone = CameraUtils.OrthographicBounds().center.y;
         return pos.y > fireZone;
-    }
-
-    void BasicEnemyKilled()
-    {
-        if (OnBasicEnemyKilled != null)
-            OnBasicEnemyKilled(ScoreOnDead);
-
-        Die();
     }
 }
