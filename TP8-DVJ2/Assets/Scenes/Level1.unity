@@ -484,6 +484,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24ea4ef5b9568d49947e0ddaeda84e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Level1Distance: 20
+  Level2Distance: 25
 --- !u!1 &1013061739
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,11 +607,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BasicEnemyMinRate: 500
   BasicEnemyMaxRate: 500
-  GroupMinSpawnRate: 1
-  GroupMaxSpawnRate: 1
-  GroupDistance: 1
+  GroupMinSpawnRate: 7
+  GroupMaxSpawnRate: 15
+  GroupDistance: 0.1
   BasicEnemyPrefab: {fileID: 147846, guid: e2a563409f05b26429e07cb45c0d2ea2, type: 3}
   GroupEnemyPrefab: {fileID: 147846, guid: f7e008b4d3916784c867b85367828138, type: 3}
+  EnemiesPerGroup: 6
 --- !u!1 &1426632861
 GameObject:
   m_ObjectHideFlags: 0

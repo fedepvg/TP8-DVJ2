@@ -103,7 +103,7 @@ MonoBehaviour:
   BulletItem: {fileID: 2105781070755828627, guid: 6511ea55daea23f42938174e7f2fc43b,
     type: 3}
   ScoreOnDead: 750
-  Speed: 4
+  Speed: 3
   Cannon: {fileID: 7974580043530210006}
   BulletPrefab: {fileID: 2105781070755828627, guid: 6511ea55daea23f42938174e7f2fc43b,
     type: 3}

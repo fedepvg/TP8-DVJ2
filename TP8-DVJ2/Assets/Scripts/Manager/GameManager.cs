@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviourSingleton<GameManager>
 {
     int EnemiesOnScreen;
+    Dictionary<int,int> LevelDistance;
+    public int Level1Distance;
+    public int Level2Distance;
 
     public override void Awake()
     {
@@ -16,6 +19,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         EnemiesOnScreen = 0;
         PlayerShip.OnPlayerKilled += GameOver;
+        LevelDistance.Add(1,Level1Distance);
+        LevelDistance.Add(2,Level2Distance);
     }
 
     public void AddEnemyOnScreen()

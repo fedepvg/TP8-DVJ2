@@ -15,11 +15,15 @@ public class EnemySpawner : MonoBehaviour
     float TimeToNextGroup;
     public GameObject BasicEnemyPrefab;
     public GameObject GroupEnemyPrefab;
+    public float EnemiesPerGroup;
+    float EnemiesOnCurrentGroup;
+    Vector3 GroupSpawnPosition;
 
     private void Start()
     {
-        TimeToNextBasicEnemy = 0.2f;
+        //TimeToNextBasicEnemy = 0.2f;
         PlayerShip.OnPlayerKilled += DestroySpawner;
+        TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
     }
 
     private void Update()
@@ -39,10 +43,37 @@ public class EnemySpawner : MonoBehaviour
         {
             GroupCooldown = 0;
             TimeToNextGroup = SetNextEnemySpawn(GroupMinSpawnRate, GroupMaxSpawnRate);
-            GameObject go = Instantiate(GroupEnemyPrefab,Vector3.zero,Quaternion.identity);
-            //recursividad con invoke para varios enemigos
-            GameManager.Instance.AddEnemyOnScreen();
+            CreateEnemyOfGroup();
         }
+    }
+
+    void CreateEnemyOfGroup()
+    {
+        if (EnemiesOnCurrentGroup < EnemiesPerGroup)
+        {
+            Instantiate(GroupEnemyPrefab,SpawnPositionForGroup(),Quaternion.identity);
+            Invoke("CreateEnemyOfGroup", GroupDistance);
+            GameManager.Instance.AddEnemyOnScreen();
+            EnemiesOnCurrentGroup++;
+        }
+        else
+        {
+            EnemiesOnCurrentGroup = 0;
+        }
+    }
+
+    Vector3 SpawnPositionForGroup()
+    {
+        if (EnemiesOnCurrentGroup == 0)
+        {
+            Bounds cameraBounds = CameraUtils.OrthographicBounds();
+            float groupSpriteOffset = GroupEnemyPrefab.GetComponent<SpriteRenderer>().bounds.size.x;
+            float xPosition = cameraBounds.min.x - groupSpriteOffset;
+            float yPosition = Random.Range(cameraBounds.center.y, cameraBounds.center.y + cameraBounds.extents.y / 2);
+            GroupSpawnPosition = new Vector3(xPosition, yPosition, 0);
+        }
+
+        return GroupSpawnPosition;
     }
 
     Vector2 GetSpawnRange()

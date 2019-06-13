@@ -46,7 +46,8 @@ public class BasicEnemy : EnemyShip
                 break;
         }
         transform.position = pos;
-        if(IsOutOfScreen())
+        float halfScale = transform.GetComponent<SpriteRenderer>().bounds.size.x;
+        if (IsOutOfScreen(halfScale))
         {
             Die();
         }

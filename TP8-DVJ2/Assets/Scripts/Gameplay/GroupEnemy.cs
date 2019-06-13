@@ -9,53 +9,49 @@ public class GroupEnemy : EnemyShip
     float XMovementTimer;
     float YMovementTimer;
     bool MoveForward;
-    float YInicial = 0;
-    float ForwardDistance = 2;
-    float BackDistance = 1.5f;
-    float XMultiplier;
+    float SinOffset;
+    bool InGame;
 
     private void Start()
     {
-        XMultiplier = ForwardDistance;
         Energy = MaxEnergy;
         ShootTimer = FireRate / 2;
         MoveForward = true;
+        SinOffset = CameraUtils.OrthographicBounds().extents.x;
+        InGame = false;
+        Invoke("SetInGame", 0.5f);
     }
 
     private void Update()
     {
         Move();
+        if(IsOutOfScreen(0) && InGame)
+        {
+            MoveForward = !MoveForward;
+        }
+    }
+
+    void SetInGame()
+    {
+        InGame = true;
     }
 
     public override void Move()
     {
-        YMovementTimer += Time.deltaTime;
+        YMovementTimer += Time.deltaTime * Speed;
         float y;
         if (MoveForward)
         {
-            y = Mathf.Sin(YMovementTimer); //* 0.8f + 2f;
-            XMovementTimer += Time.deltaTime;
+            y = Mathf.Sin(YMovementTimer);
+            XMovementTimer += Time.deltaTime * Speed;
         }
         else
         {
             y = Mathf.Sin(YMovementTimer);
-            XMovementTimer -= Time.deltaTime;
+            XMovementTimer -= Time.deltaTime * Speed;
         }
 
-        transform.position = new Vector2(XMovementTimer, y);
-
-        if (y < YInicial - 0.5f && MoveForward == true)
-        {
-            MoveForward = false;
-            XMultiplier = ForwardDistance;
-            XMovementTimer = YMovementTimer;
-        }
-        else if(y > YInicial + 0.5f && MoveForward == false)
-        {
-            MoveForward = true;
-            XMultiplier = ForwardDistance;
-            YMovementTimer = XMovementTimer;
-        }
+        transform.position = new Vector2(XMovementTimer - SinOffset, y);
     }
 
     public override void Shoot()

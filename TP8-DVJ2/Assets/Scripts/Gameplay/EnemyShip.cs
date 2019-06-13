@@ -17,16 +17,15 @@ public abstract class EnemyShip : Ship
     public GameObject BulletPrefab;
     public float FireRate;
 
-    protected bool IsOutOfScreen()
+    protected bool IsOutOfScreen(float offset)
     {
         Bounds bounds = CameraUtils.OrthographicBounds();
-        float halfScale = transform.GetComponent<SpriteRenderer>().bounds.size.x;
         Vector3 pos = transform.position;
         float leftBound = bounds.min.x;
         float rightBound = bounds.max.x;
         float downBound = bounds.min.y;
-        if (pos.x < leftBound - halfScale || pos.x > rightBound + halfScale ||
-            pos.y < downBound - halfScale)
+        if (pos.x < leftBound - offset || pos.x > rightBound + offset ||
+            pos.y < downBound - offset)
         {
             return true;
         }
